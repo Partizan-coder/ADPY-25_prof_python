@@ -41,7 +41,6 @@ class CandidateComparison:
             candidate_sex = '0'
             candidate_city = ''
             candidate_family = '0'
-        user_id = 646455113
         self.candidate_searching_parameters = {'user_id': user_id, 'user_name': user_name, 'min_age': candidate_min_age, 'max_age': candidate_max_age, 'sex': candidate_sex, 'city': candidate_city, 'family': candidate_family}
         return
 
@@ -76,7 +75,6 @@ class VkCandidate:
 
     def __init__(self, candidate_id):
         self.vk_access_token = '14ecbd7414ecbd7414ecbd748d149baf43114ec14ecbd7474b10e46ed414ad017577f67'
-        # self.vk_access_token = '81aa405d81aa405d81aa405d6581d0e21b881aa81aa405de06326507d3ba5e73b2279a0'
         candidate = f'https://api.vk.com/method/users.get?user_ids={candidate_id}&fields=bdate,home_town,sex,relation&rev=0&v=5.131&access_token={self.vk_access_token}'
         time.sleep(1)
         self.candidate_info = requests.get(candidate).json()
@@ -121,7 +119,6 @@ class SqlRequest:
         return
 
     def open_connection(self, db):
-        print(f'host=localhost dbname={db} user={self.sql_login} password={self.sql_pass} port=5432')
         self.connection = psycopg2.connect(f'host=localhost dbname={db} user={self.sql_login} password={self.sql_pass} port=5432')
         self.cursor = self.connection.cursor()
         print("Соединение с PostgreSQL установлено")
