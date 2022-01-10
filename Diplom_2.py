@@ -25,7 +25,7 @@ if __name__ == '__main__':
                 print('Кандидат подходит по параметрам')
                 vk_request = candidate.get_photo(candidate_id)
                 if candidate.no_photo == True:
-                    print('У кандидата нет фото_1')
+                    print('У кандидата нет фото')
                 else:
                     print('VK_request для фото:\n', vk_request)
                     photos_dict = candidate.get_photos_dict(vk_request)
