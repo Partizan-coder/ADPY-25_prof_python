@@ -7,7 +7,7 @@ class SqlRequest:
 
     def __init__(self):
         self.sql_login = 'postgres'
-        self.sql_pass = ''
+        self.sql_pass = 'y@ppizo9'
         return
 
     def open_connection(self, db):

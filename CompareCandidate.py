@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import random
 
 import requests
 import vk_api
@@ -33,7 +34,6 @@ class CandidateComparison:
                                      '0 — не указано. \n'
                                      'Укажите число из вариантов выше, соответствующее цели поиска:  ')
         else:
-            user_id = ''
             candidate_min_age = '18'
             candidate_max_age = '65'
             candidate_sex = '0'
@@ -73,7 +73,6 @@ class VkCandidate:
 
     def __init__(self, candidate_id):
         self.vk_access_token = '14ecbd7414ecbd7414ecbd748d149baf43114ec14ecbd7474b10e46ed414ad017577f67'
-        # self.vk_access_token = '81aa405d81aa405d81aa405d6581d0e21b881aa81aa405de06326507d3ba5e73b2279a0'
         candidate = f'https://api.vk.com/method/users.get?user_ids={candidate_id}&fields=bdate,home_town,sex,relation&rev=0&v=5.131&access_token={self.vk_access_token}'
         time.sleep(1)
         self.candidate_info = requests.get(candidate).json()
@@ -97,6 +96,8 @@ class VkCandidate:
     # Создаем словарь типа {количество лайков: id_фоторафии} на основании полученных фото из get_photo
         photos_count = int(request['response']['count'])
         self.photos_dict = {}
+        if photos_count > 50:
+            photos_count = 50
         for i in range(photos_count):
             key_likes = request['response']['items'][i]['likes'].setdefault('count', 0)
             value_url = request['response']['items'][i]['id']
@@ -117,11 +118,11 @@ def write_msg(user_id, candidate_id, photos_dict):
     dict_len = len(photos_dict)
     photos_list = list(photos_dict.values())
     if dict_len >= 3:
-        vk_message.method('messages.send', {'user_id': user_id, 'message': candidate_link, 'random_id': randrange(10 ** 7)})
+        vk_message.method('messages.send', {'user_id': user_id, 'message': candidate_link, 'random_id': randrange(10000000)})
         for i in range(3):
-            vk_message.method('messages.send', {'user_id': user_id, 'random_id': randrange(10 ** 7), 'attachment': f'photo{candidate_id}_{photos_list[i-1]}'})
+            vk_message.method('messages.send', {'user_id': user_id, 'random_id': randrange(10000000), 'attachment': f'photo{candidate_id}_{photos_list[i-1]}'})
     # Если в альбоме фото профиля пользователя менее трех фото
     else:
-        vk_message.method('messages.send', {'user_id': user_id, 'message': candidate_link, 'random_id': randrange(10 ** 7)})
+        vk_message.method('messages.send', {'user_id': user_id, 'message': candidate_link, 'random_id': -randrange(10000000)})
         for i in range(dict_len):
-            vk_message.method('messages.send', {'user_id': user_id, 'random_id': randrange(10 ** 7), 'attachment': f'photo{candidate_id}_{photos_list[i - 1]}'})
+            vk_message.method('messages.send', {'user_id': user_id, 'random_id': randrange(10000000), 'attachment': f'photo{candidate_id}_{photos_list[i - 1]}'})
